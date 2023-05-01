@@ -19,28 +19,39 @@ function RecipeGenerator() {
   }, []);
   
 
-
   const generateRecipe = () => {
     try {
-      const data = JSON.parse(json);
+      const jsonData = JSON.parse(json);
+      let recipeData;
+  
+      if (Array.isArray(jsonData)) {
+        recipeData = jsonData.find((item) => item['@type'] === 'Recipe');
+      } else {
+        recipeData = jsonData;
+      }
+  
+      if (!recipeData || recipeData['@type'] !== 'Recipe') {
+        alert('The JSON object must be of type "Recipe"');
+        return;
+      }
   
       const newRecipe = {
-        title: data.name,
-        author: data.author['name'],
-        description: data.description,
-        image: data.image[0],
-        totalTime: data.totalTime,
-        recipeYield: data.recipeYield,
-        recipeCuisine: data.recipeCuisine,
-        recipeCategory: Array.isArray(data.recipeCategory)
-          ? data.recipeCategory.join(', ')
-          : data.recipeCategory,
-        keywords: Array.isArray(data.keywords)
-          ? data.keywords.join(', ')
-          : data.keywords,
-        nutrition: data.nutrition,
-        ingredients: data.recipeIngredient,
-        instructions: data.recipeInstructions.map((step) => step.text),
+        title: recipeData.name,
+        author: recipeData.author['name'],
+        description: recipeData.description,
+        image: recipeData.image[0],
+        totalTime: recipeData.totalTime,
+        recipeYield: recipeData.recipeYield,
+        recipeCuisine: recipeData.recipeCuisine,
+        recipeCategory: Array.isArray(recipeData.recipeCategory)
+          ? recipeData.recipeCategory.join(', ')
+          : recipeData.recipeCategory,
+        keywords: Array.isArray(recipeData.keywords)
+          ? recipeData.keywords.join(', ')
+          : recipeData.keywords,
+        nutrition: recipeData.nutrition,
+        ingredients: recipeData.recipeIngredient,
+        instructions: recipeData.recipeInstructions.map((step) => step.text),
       };
   
       const updatedSavedRecipes = [...savedRecipes, newRecipe];
@@ -51,7 +62,6 @@ function RecipeGenerator() {
       console.error(error);
     }
   };
-  
   
   
   const clearRecipe = () => {

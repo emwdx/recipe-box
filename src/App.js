@@ -45,8 +45,8 @@ function App() {
               <Card.Body>
                 <Card.Title>{recipe.name}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
-                  {recipe.author && `By ${recipe.author.name}`}
-                </Card.Subtitle>
+  {recipe.author && recipe.author.name && `By ${recipe.author.name}`}
+</Card.Subtitle>
                 <Card.Text>{recipe.description}</Card.Text>
                 <Card.Subtitle className="mb-2 text-muted">
                   Ingredients
